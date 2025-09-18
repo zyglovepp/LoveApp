@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love APP - 情感树</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航 -->
+        <nav class="navbar">
+            <a href="{{ url_for('index') }}" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <h1 class="logo">我们的恋爱小树</h1>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <section class="tree-detail-section">
+                <div class="tree-detail-container">
+                    <!-- 情感树大图 -->
+                    <div class="tree-large-image">
+                        {% if tree_status.stage == 'seed' %}
+                            <img src="{{ url_for('static', filename='images/tree_seed.png') }}" alt="种子">
+                        {% elif tree_status.stage == 'sprout' %}
+                            <img src="{{ url_for('static', filename='images/tree_sprout.png') }}" alt="发芽">
+                        {% elif tree_status.stage == 'leaf' %}
+                            <img src="{{ url_for('static', filename='images/tree_leaf.png') }}" alt="长叶">
+                        {% elif tree_status.stage == 'flower' %}
+                            <img src="{{ url_for('static', filename='images/tree_flower.png') }}" alt="开花">
+                        {% elif tree_status.stage == 'fruit' %}
+                            <img src="{{ url_for('static', filename='images/tree_fruit.png') }}" alt="结果">
+                        {% endif %}
+                    </div>
+                    
+                    <!-- 成长信息 -->
+                    <div class="tree-growth-info">
+                        <h2>成长历程</h2>
+                        <div class="growth-stages">
+                            <div class="stage-item {{ 'active' if tree_status.stage == 'seed' or tree_status.water_count >= 0 }}">
+                                <div class="stage-icon"><i class="fas fa-seedling"></i></div>
+                                <div class="stage-name">种子</div>
+                                <div class="stage-progress">{{ tree_status.water_count }}/0</div>
+                            </div>
+                            <div class="stage-divider"></div>
+                            <div class="stage-item {{ 'active' if tree_status.stage == 'sprout' or tree_status.water_count >= 5 }}">
+                                <div class="stage-icon"><i class="fas fa-seedling"></i></div>
+                                <div class="stage-name">发芽</div>
+                                <div class="stage-progress">{{ tree_status.water_count }}/5</div>
+                            </div>
+                            <div class="stage-divider"></div>
+                            <div class="stage-item {{ 'active' if tree_status.stage == 'leaf' or tree_status.water_count >= 15 }}">
+                                <div class="stage-icon"><i class="fas fa-leaf"></i></div>
+                                <div class="stage-name">长叶</div>
+                                <div class="stage-progress">{{ tree_status.water_count }}/15</div>
+                            </div>
+                            <div class="stage-divider"></div>
+                            <div class="stage-item {{ 'active' if tree_status.stage == 'flower' or tree_status.water_count >= 30 }}">
+                                <div class="stage-icon"><i class="fas fa-pagelines"></i></div>
+                                <div class="stage-name">开花</div>
+                                <div class="stage-progress">{{ tree_status.water_count }}/30</div>
+                            </div>
+                            <div class="stage-divider"></div>
+                            <div class="stage-item {{ 'active' if tree_status.stage == 'fruit' or tree_status.water_count >= 50 }}">
+                                <div class="stage-icon"><i class="fas fa-apple-alt"></i></div>
+                                <div class="stage-name">结果</div>
+                                <div class="stage-progress">{{ tree_status.water_count }}/50</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tree-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">{{ tree_status.water_count }}</div>
+                                <div class="stat-label">浇水次数</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ {'seed': '种子', 'sprout': '发芽', 'leaf': '长叶', 'flower': '开花', 'fruit': '结果'}.get(tree_status.stage, '种子') }}</div>
+                                <div class="stat-label">当前阶段</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ tree_status.last_water_date if tree_status.last_water_date else '还未浇水' }}</div>
+                                <div class="stat-label">最后浇水</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 成长提示 -->
+                    <div class="growth-tips">
+                        <h3>💡 成长小贴士</h3>
+                        <p>
+                            {% if tree_status.stage == 'seed' %}
+                                种子需要你的爱来发芽，快去记录第一次为对方做的事情吧！
+                            {% elif tree_status.stage == 'sprout' %}
+                                小树已经发芽了！继续用爱心浇灌，它会茁壮成长的～
+                            {% elif tree_status.stage == 'leaf' %}
+                                小树长出了嫩绿的叶子！每一次付出都会让它更加茂盛。
+                            {% elif tree_status.stage == 'flower' %}
+                                小树开花了！美丽的花朵象征着你们的爱情正在绽放。
+                            {% elif tree_status.stage == 'fruit' %}
+                                太棒了！小树结果了！你可以用果实兑换特别的奖励哦～
+                            {% endif %}
+                        </p>
+                        <a href="{{ url_for('record_page') }}" class="water-btn">
+                            <i class="fas fa-tint"></i> 去浇水
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>Love APP - 让爱更纯粹 ❤️</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

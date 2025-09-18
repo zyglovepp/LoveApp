@@ -1,0 +1,29 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景 -->
+    <rect width="200" height="200" fill="none"/>
+    
+    <!-- 土壤 -->
+    <path d="M0,160 Q100,180 200,160 L200,200 L0,200 Z" fill="#8B4513"/>
+    
+    <!-- 茎 -->
+    <path d="M100,150 C100,130 100,110 100,90" stroke="#4CAF50" stroke-width="4" fill="none" stroke-linecap="round"/>
+    
+    <!-- 叶子1 -->
+    <path d="M100,110 C120,100 130,110 120,120 Z" fill="#66BB6A"/>
+    <path d="M100,110 C120,100 130,110 120,120" stroke="#43A047" stroke-width="1" fill="none"/>
+    
+    <!-- 叶子2 -->
+    <path d="M100,100 C80,90 70,100 80,110 Z" fill="#66BB6A"/>
+    <path d="M100,100 C80,90 70,100 80,110" stroke="#43A047" stroke-width="1" fill="none"/>
+    
+    <!-- 小芽 -->
+    <path d="M100,90 C110,80 115,85 120,75" stroke="#4CAF50" stroke-width="3" fill="none" stroke-linecap="round"/>
+    
+    <!-- 装饰性小草 -->
+    <path d="M70,160 C75,155 80,158 85,152" stroke="#4CAF50" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M130,160 C135,155 140,158 145,152" stroke="#4CAF50" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M90,160 C95,150 105,150 110,160" stroke="#4CAF50" stroke-width="2" fill="none" stroke-linecap="round"/>
+    
+    <!-- 标题 -->
+    <text x="100" y="30" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">发芽阶段</text>
+</svg>

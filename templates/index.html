@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love APP - 首页</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航 -->
+        <nav class="navbar">
+            <h1 class="logo"><i class="fas fa-heart"></i> Love APP</h1>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 情感树展示区域 -->
+            <section class="tree-section">
+                <div class="tree-container">
+                    <h2>我们的恋爱小树</h2>
+                    <div class="tree-image">
+                        {% if tree_status.stage == 'seed' %}
+                            <img src="{{ url_for('static', filename='images/tree_seed.png') }}" alt="种子">
+                        {% elif tree_status.stage == 'sprout' %}
+                            <img src="{{ url_for('static', filename='images/tree_sprout.png') }}" alt="发芽">
+                        {% elif tree_status.stage == 'leaf' %}
+                            <img src="{{ url_for('static', filename='images/tree_leaf.png') }}" alt="长叶">
+                        {% elif tree_status.stage == 'flower' %}
+                            <img src="{{ url_for('static', filename='images/tree_flower.png') }}" alt="开花">
+                        {% elif tree_status.stage == 'fruit' %}
+                            <img src="{{ url_for('static', filename='images/tree_fruit.png') }}" alt="结果">
+                        {% endif %}
+                    </div>
+                    <div class="tree-info">
+                        <p>当前状态：{{ {'seed': '种子', 'sprout': '发芽', 'leaf': '长叶', 'flower': '开花', 'fruit': '结果'}.get(tree_status.stage, '种子') }}</p>
+                        <p>浇水次数：{{ tree_status.water_count }}</p>
+                        <p>果实数量：{{ fruits }} <i class="fas fa-apple-alt"></i></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 功能导航 -->
+            <section class="feature-nav">
+                <div class="feature-items">
+                    <a href="{{ url_for('record_page') }}" class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-pen-fancy"></i></div>
+                        <div class="feature-name">记录付出</div>
+                    </a>
+                    <a href="{{ url_for('tree_page') }}" class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-tree"></i></div>
+                        <div class="feature-name">情感树</div>
+                    </a>
+                    <a href="{{ url_for('rewards_page') }}" class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-gift"></i></div>
+                        <div class="feature-name">果实兑换</div>
+                    </a>
+                    <a href="{{ url_for('memories_page') }}" class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-images"></i></div>
+                        <div class="feature-name">共同回忆</div>
+                    </a>
+                    <a href="{{ url_for('tips_page') }}" class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-lightbulb"></i></div>
+                        <div class="feature-name">恋爱小贴士</div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 今日提醒 -->
+            <section class="daily-reminder">
+                <div class="reminder-content">
+                    <h3>💌 今日小贴士</h3>
+                    <p class="tip-text">
+                        {% set tips = ['记得为对方做一件小事，哪怕是一句暖心的话。', '今天你为恋爱小树浇水了吗？', '回忆一下你们第一次见面的场景，是不是很美好？', '给对方一个惊喜，创造新的回忆。'] %}
+                        {{ tips|random }}
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>Love APP - 让爱更纯粹 ❤️</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

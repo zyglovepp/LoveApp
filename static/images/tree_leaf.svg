@@ -1,0 +1,46 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景 -->
+    <rect width="200" height="200" fill="none"/>
+    
+    <!-- 土壤 -->
+    <path d="M0,160 Q100,180 200,160 L200,200 L0,200 Z" fill="#8B4513"/>
+    
+    <!-- 树干 -->
+    <path d="M100,150 C100,130 100,110 100,80" stroke="#795548" stroke-width="6" fill="none" stroke-linecap="round"/>
+    
+    <!-- 主要分支 -->
+    <path d="M100,120 C110,110 120,105 130,95" stroke="#6D4C41" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M100,110 C90,100 80,95 70,90" stroke="#6D4C41" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M100,100 C105,90 110,80 115,70" stroke="#6D4C41" stroke-width="4" fill="none" stroke-linecap="round"/>
+    
+    <!-- 叶子组1 -->
+    <path d="M130,95 C150,85 160,95 150,105 Z" fill="#4CAF50"/>
+    <path d="M130,95 C150,85 160,95 150,105" stroke="#388E3C" stroke-width="1" fill="none"/>
+    
+    <path d="M140,90 C160,80 170,90 160,100 Z" fill="#4CAF50"/>
+    <path d="M140,90 C160,80 170,90 160,100" stroke="#388E3C" stroke-width="1" fill="none"/>
+    
+    <!-- 叶子组2 -->
+    <path d="M70,90 C50,80 40,90 50,100 Z" fill="#4CAF50"/>
+    <path d="M70,90 C50,80 40,90 50,100" stroke="#388E3C" stroke-width="1" fill="none"/>
+    
+    <path d="M60,85 C40,75 30,85 40,95 Z" fill="#4CAF50"/>
+    <path d="M60,85 C40,75 30,85 40,95" stroke="#388E3C" stroke-width="1" fill="none"/>
+    
+    <!-- 叶子组3 -->
+    <path d="M115,70 C135,60 145,70 135,80 Z" fill="#4CAF50"/>
+    <path d="M115,70 C135,60 145,70 135,80" stroke="#388E3C" stroke-width="1" fill="none"/>
+    
+    <path d="M125,65 C145,55 155,65 145,75 Z" fill="#4CAF50"/>
+    <path d="M125,65 C145,55 155,65 145,75" stroke="#388E3C" stroke-width="1" fill="none"/>
+    
+    <!-- 装饰性小草 -->
+    <path d="M70,160 C75,155 80,158 85,152" stroke="#4CAF50" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M130,160 C135,155 140,158 145,152" stroke="#4CAF50" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M90,160 C95,150 105,150 110,160" stroke="#4CAF50" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M60,160 C65,150 75,150 80,160" stroke="#4CAF50" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M140,160 C145,150 155,150 160,160" stroke="#4CAF50" stroke-width="2" fill="none" stroke-linecap="round"/>
+    
+    <!-- 标题 -->
+    <text x="100" y="30" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">长叶阶段</text>
+</svg>
