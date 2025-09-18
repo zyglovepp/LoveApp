@@ -1,130 +1,113 @@
-# LoveApp - 恋爱记录与互动应用
+# Love App
 
-![LoveApp Logo](static/images/tree_flower.svg)
+一个用React开发的恋爱记录和情感管理手机应用。通过记录日常付出、培育情感树、管理共同回忆和纪念日等功能，帮助情侣们更好地维护和经营感情。
 
-LoveApp是一款专为情侣设计的恋爱记录与互动应用，帮助情侣们记录美好瞬间、增进感情交流、共同见证爱情成长。
+## 功能特点
 
-## 🎯 功能特点
+- **记录付出**：每天记录为对方做的小事，表达爱意
+- **情感树**：根据记录次数自动成长，分为种子、发芽、长叶、开花、结果五个阶段
+- **果实兑换**：用积累的果实兑换各种有趣的爱情奖励
+- **共同回忆**：记录和分享生活中的美好瞬间
+- **纪念日管理**：设置并提醒重要的纪念日
+- **恋爱小贴士**：提供实用的恋爱建议和技巧
 
-### 1. 恋爱付出记录
-- 记录日常的关心与付出
-- 支持添加文字描述、心情标签和照片
-- 历史记录随时查看，回忆温馨时光
+## 技术栈
 
-### 2. 情感树成长系统
-- 记录一次付出，为情感树浇一次水
-- 五个成长阶段：种子→发芽→长叶→开花→结果
-- 实时查看情感树状态，见证爱情的成长历程
+- **前端**：React、React Router、Vite
+- **样式**：CSS3
+- **存储**：LocalStorage（浏览器本地存储）
+- **移动平台**：Capacitor（支持Android平台）
 
-### 3. 果实兑换机制
-- 情感树结果后获得果实
-- 果实可兑换各种爱情福利：和好券、心愿券、专属仪式券等
-- 兑换记录清晰可查，增添恋爱乐趣
+## 项目文件框架
 
-### 4. 共同回忆与纪念日
-- 创建共同相册，记录美好瞬间
-- 设置重要纪念日提醒
-- 支持添加标题、描述和标签，分类管理回忆
+### 核心文件结构
 
-### 5. 恋爱小贴士
-- 每日推荐恋爱相处技巧
-- 分类浏览：沟通技巧、矛盾处理、亲密关系、共同成长
-- 支持分享给伴侣，共同学习进步
+| 文件/目录 | 功能作用 |
+|----------|---------|
+| `index.html` | HTML入口文件，包含应用的基本结构 |
+| `package.json` | 项目配置文件，定义依赖和脚本命令 |
+| `vite.config.js` | Vite构建工具配置文件 |
+| `.gitignore` | Git版本控制忽略文件配置 |
+| `README.md` | 项目说明文档 |
+| `capacitor.config.json` | Capacitor配置文件，用于移动平台构建 |
 
-## 🛠️ 技术栈
+### 源代码目录 (`src/`)
 
-- **后端框架**：Python Flask
-- **前端技术**：HTML5、CSS3、JavaScript
-- **数据存储**：JSON文件（本地存储）
-- **图像资源**：SVG格式（情感树成长阶段图）
-- **部署支持**：本地开发服务器
+| 文件/目录 | 功能作用 |
+|----------|---------|
+| `src/main.jsx` | React应用入口文件 |
+| `src/App.jsx` | 应用主组件，包含路由和状态管理 |
+| `src/index.css` | 全局样式文件 |
+| `src/App.css` | 应用主样式文件 |
+| `src/pages/` | 页面组件目录 |
+| &nbsp;&nbsp;`src/pages/Home.jsx` | 首页组件，显示情感树和功能导航 |
+| &nbsp;&nbsp;`src/pages/Record.jsx` | 记录付出页面组件 |
+| &nbsp;&nbsp;`src/pages/Tree.jsx` | 情感树详情页面组件 |
+| &nbsp;&nbsp;`src/pages/Rewards.jsx` | 果实兑换页面组件 |
+| &nbsp;&nbsp;`src/pages/Memories.jsx` | 共同回忆页面组件 |
+| &nbsp;&nbsp;`src/pages/Anniversaries.jsx` | 纪念日页面组件 |
+| &nbsp;&nbsp;`src/pages/Tips.jsx` | 恋爱小贴士页面组件 |
 
-## 🚀 安装指南
+### 静态资源目录 (`public/`)
+
+| 文件/目录 | 功能作用 |
+|----------|---------|
+| `public/images/` | 存放应用所需的图片资源 |
+| &nbsp;&nbsp;`public/images/tree_seed.svg` | 情感树种子阶段图片 |
+| &nbsp;&nbsp;`public/images/tree_sprout.svg` | 情感树发芽阶段图片 |
+| &nbsp;&nbsp;`public/images/tree_leaf.svg` | 情感树长叶阶段图片 |
+| &nbsp;&nbsp;`public/images/tree_flower.svg` | 情感树开花阶段图片 |
+| &nbsp;&nbsp;`public/images/tree_fruit.svg` | 情感树结果阶段图片 |
+
+### 构建输出目录 (`dist/`)
+
+构建后的生产版本文件将生成在此目录中，用于部署或移动平台打包。
+
+### Android平台目录 (`android/`)
+
+Capacitor生成的Android项目目录，用于构建Android应用。
+
+## 开发和运行
 
 ### 前提条件
-- 已安装 Python 3.6 或更高版本
 
-### 安装步骤
+- 安装Node.js (推荐14.x或更高版本)
+- 安装npm或yarn
 
-1. 克隆项目代码
-   ```bash
-   git clone https://github.com/zyglovepp/LoveApp.git
-   cd LoveApp
-   ```
+### 安装依赖
 
-2. 安装依赖（如果尚未安装）
-   ```bash
-   python -m pip install flask
-   ```
-
-3. 运行应用
-   - Windows用户：双击 `run_app.bat` 文件
-   - 其他用户：在命令行中执行
-     ```bash
-     python -m flask run --host=0.0.0.0 --port=5000
-     ```
-
-4. 访问应用
-   在浏览器中打开 `http://127.0.0.1:5000` 即可使用LoveApp
-
-## 📖 使用说明
-
-### 开始使用
-1. 打开应用首页，即可看到情感树状态
-2. 点击"记录付出"按钮，记录你们的甜蜜瞬间
-3. 定期查看情感树成长，见证爱情的进步
-4. 积累果实，兑换各种爱情福利
-5. 创建共同回忆，记录美好时光
-6. 查看恋爱小贴士，提升相处质量
-
-### 情感树成长规则
-- 种子阶段：初始状态
-- 发芽阶段：累计记录3次
-- 长叶阶段：累计记录7次
-- 开花阶段：累计记录15次
-- 结果阶段：累计记录30次
-
-## 📁 项目结构
-
-```
-LoveApp/
-├── app.py               # 主应用文件，包含所有业务逻辑和路由
-├── run_app.bat          # Windows启动脚本
-├── .gitignore           # Git忽略文件配置
-├── static/              # 静态资源文件
-│   ├── images/          # 图像文件（情感树各阶段图）
-│   ├── style.css        # 样式文件
-│   └── script.js        # JavaScript交互脚本
-└── templates/           # HTML模板文件
-    ├── index.html       # 首页（情感树展示）
-    ├── record.html      # 记录付出页面
-    ├── tree.html        # 情感树详情页面
-    ├── rewards.html     # 果实兑换页面
-    ├── memories.html    # 共同回忆页面
-    └── tips.html        # 恋爱小贴士页面
+```bash
+npm install
+# 或
+ yarn install
 ```
 
-## 💡 开发说明
+### 开发模式
 
-### 数据存储
-- 应用使用JSON文件存储数据
-- 数据会保存在项目根目录的 `data` 文件夹中
-- 包括记录数据、用户数据、果实数据等
+```bash
+npm run dev
+# 或
+ yarn dev
+```
 
-### 自定义配置
-- 可以修改 `app.py` 中的配置参数
-- 调整情感树成长阈值、果实兑换规则等
+然后在浏览器中访问 `http://localhost:3000`
 
-## 🤝 贡献指南
-欢迎对项目提出改进建议或提交代码！请遵循以下步骤：
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
+### 构建生产版本
 
-## 📝 License
-本项目采用 MIT License - 详情请查看 [LICENSE](LICENSE) 文件
+```bash
+npm run build
+# 或
+ yarn build
+```
 
-## 💌 寄语
-爱情需要用心经营，希望LoveApp能陪伴你们记录每一个美好的瞬间，让爱情之树茁壮成长！💕
+构建后的文件将在 `dist` 目录中
+
+## 注意事项
+
+- 本应用使用LocalStorage存储数据，数据仅保存在用户的浏览器中
+- 推荐在现代浏览器中运行（Chrome、Firefox、Safari、Edge）
+- 如需在手机上查看，可使用浏览器的开发者工具切换到移动设备视图
+
+## License
+
+MIT

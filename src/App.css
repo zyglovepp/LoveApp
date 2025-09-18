@@ -1,0 +1,285 @@
+/* App.css - 应用主样式 */
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 导航栏样式 */
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.back-btn {
+  color: #ff6b6b;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  text-decoration: none;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff6b6b;
+  flex: 1;
+  text-align: center;
+}
+
+.logo i {
+  margin-right: 0.5rem;
+}
+
+/* 主内容区域 */
+.main-content {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+/* 情感树样式 */
+.tree-section {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tree-container {
+  text-align: center;
+}
+
+.tree-container h2 {
+  color: #ff6b6b;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.tree-image img {
+  max-width: 100%;
+  height: auto;
+  max-height: 200px;
+  border-radius: 10px;
+}
+
+.tree-info {
+  margin-top: 1rem;
+}
+
+.tree-info p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+/* 功能导航 */
+.feature-nav {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature-items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.feature-item:active {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  font-size: 1.5rem;
+  color: #ff6b6b;
+  margin-bottom: 0.5rem;
+}
+
+.feature-name {
+  font-weight: bold;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* 每日提醒 */
+.daily-reminder {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.reminder-content h3 {
+  color: #ff6b6b;
+  margin-bottom: 0.8rem;
+}
+
+.tip-text {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* 表单样式 */
+.form-section {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-section h2 {
+  color: #ff6b6b;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #555;
+}
+
+textarea {
+  width: 100%;
+  height: 120px;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.form-actions {
+  margin-top: 1.5rem;
+}
+
+/* 列表样式 */
+.list-section {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.list-section h2 {
+  color: #ff6b6b;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.list-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.list-item-title {
+  font-weight: bold;
+  color: #333;
+}
+
+.list-item-date {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+/* 页脚 */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* 提示消息 */
+.message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  z-index: 3000;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease;
+}
+
+.message.success {
+  background-color: #4ecdc4;
+}
+
+.message.error {
+  background-color: #ff6b6b;
+}
+
+.message.warning {
+  background-color: #ffd93d;
+  color: #333;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .feature-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .logo {
+    font-size: 1.2rem;
+  }
+}
