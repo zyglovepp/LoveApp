@@ -83,68 +83,55 @@ function Anniversaries({ anniversaries, onAddAnniversary }) {
 
   return (
     <div className="anniversaries-page">
-      {/* 顶部导航 */}
-      <nav className="navbar">
-        <button className="back-btn" onClick={() => navigate('/')}>
-          <i className="fas fa-arrow-left"></i>
-        </button>
-        <h1 className="logo">纪念日</h1>
-        <button 
-          className="add-btn" 
-          onClick={() => setShowAddForm(!showAddForm)}
-        >
-          <i className="fas fa-plus"></i>
-        </button>
-      </nav>
-
       {/* 添加纪念日表单 */}
       {showAddForm && (
-        <div className="form-section">
-          <button 
-            className="close-btn" 
-            onClick={() => setShowAddForm(false)}
-          >
-            <i className="fas fa-times"></i>
-          </button>
-          <h2>添加纪念日</h2>
-          <form onSubmit={handleAddAnniversary}>
-            <div className="form-group">
-              <label htmlFor="name">纪念日名称 *</label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="例如：相识纪念日、第一次约会"
-                required
-                minLength={2}
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="date">日期 *</label>
-              <input
-                id="date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                required
-              />
-            </div>
-            
-            <div className="form-actions">
-              <button type="submit" disabled={loading}>
-                {loading ? '添加中...' : '保存纪念日'}
-              </button>
-            </div>
-          </form>
+        <div className="module-container">
+          <div className="form-section">
+            <button 
+              className="close-btn" 
+              onClick={() => setShowAddForm(false)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            <h2>添加纪念日</h2>
+            <form onSubmit={handleAddAnniversary}>
+              <div className="form-group">
+                <label htmlFor="name">纪念日名称 *</label>
+                <input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="例如：相识纪念日、第一次约会"
+                  required
+                  minLength={2}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="date">日期 *</label>
+                <input
+                  id="date"
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  required
+                />
+              </div>
+              
+              <div className="form-actions">
+                <button type="submit" disabled={loading} className="primary">
+                  {loading ? '添加中...' : '保存纪念日'}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
-      {/* 主内容区域 */}
-      <main className="main-content">
-        {/* 下一个纪念日提醒 */}
-        {nextAnniversary && (
+      {/* 下一个纪念日提醒 */}
+      {nextAnniversary && (
+        <div className="module-container">
           <section className="daily-reminder">
             <div className="reminder-content">
               <h3>💖 下一个纪念日</h3>
@@ -168,10 +155,12 @@ function Anniversaries({ anniversaries, onAddAnniversary }) {
               </p>
             </div>
           </section>
-        )}
+        </div>
+      )}
 
-        {/* 纪念日列表 */}
-        {sortedAnniversaries.length === 0 ? (
+      {/* 纪念日列表 */}
+      {sortedAnniversaries.length === 0 ? (
+        <div className="module-container">
           <div style={{ 
             textAlign: 'center', 
             padding: '2rem',
@@ -187,11 +176,14 @@ function Anniversaries({ anniversaries, onAddAnniversary }) {
             <button 
               onClick={() => setShowAddForm(true)}
               style={{ width: '100%', padding: '0.8rem' }}
+              className="primary"
             >
               <i className="fas fa-plus"></i> 添加纪念日
             </button>
           </div>
-        ) : (
+        </div>
+      ) : (
+        <div className="module-container">
           <section className="list-section">
             <h2>重要日子</h2>
             {sortedAnniversaries.map(anniversary => {
@@ -227,8 +219,8 @@ function Anniversaries({ anniversaries, onAddAnniversary }) {
               )
             })}
           </section>
-        )}
-      </main>
+        </div>
+      )}
 
       {/* 提示消息 */}
       {message && (

@@ -36,17 +36,7 @@ function Rewards({ fruits, rewards, onExchangeReward }) {
 
   return (
     <div className="rewards-page">
-      {/* 顶部导航 */}
-      <nav className="navbar">
-        <button className="back-btn" onClick={() => navigate('/')}>
-          <i className="fas fa-arrow-left"></i>
-        </button>
-        <h1 className="logo">果实兑换</h1>
-        <div style={{ width: '1.5rem' }}></div> {/* 占位，保持标题居中 */}
-      </nav>
-
-      {/* 主内容区域 */}
-      <main className="main-content">
+      <div className="module-container">
         {/* 果实数量显示 */}
         <section className="tree-section">
           <div className="tree-container">
@@ -59,7 +49,9 @@ function Rewards({ fruits, rewards, onExchangeReward }) {
             </p>
           </div>
         </section>
+      </div>
 
+      <div className="module-container">
         {/* 兑换奖励 */}
         <section className="form-section">
           <h2>兑换奖励</h2>
@@ -83,22 +75,25 @@ function Rewards({ fruits, rewards, onExchangeReward }) {
           
           <div className="form-actions">
             <button 
-              type="button" 
-              onClick={handleExchange} 
-              disabled={loading || fruits < 1}
-            >
-              {loading ? '兑换中...' : `兑换奖励 (消耗1个果实)`}
-            </button>
+                type="button" 
+                className="primary"
+                onClick={handleExchange} 
+                disabled={loading || fruits < 1}
+              >
+                {loading ? '兑换中...' : `兑换奖励 (消耗1个果实)`}
+              </button>
             {fruits < 1 && (
               <p style={{ marginTop: '0.5rem', color: '#ff6b6b', fontSize: '0.9rem' }}>
                 果实数量不足，需要先记录更多的付出哦！
               </p>
             )}
           </div>
-        </section>
+          </section>
+        </div>
 
-        {/* 我的奖励列表 */}
         {rewards.length > 0 && (
+          <div className="module-container">
+            {/* 我的奖励列表 */}
           <section className="list-section">
             <h2>我的奖励</h2>
             {rewards.map(reward => (
@@ -119,8 +114,8 @@ function Rewards({ fruits, rewards, onExchangeReward }) {
               </div>
             ))}
           </section>
-        )}
-      </main>
+        </div>
+      )}
 
       {/* 提示消息 */}
       {message && (

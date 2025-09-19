@@ -126,67 +126,49 @@ function Tips() {
 
   return (
     <div className="tips-page">
-      {/* 顶部导航 */}
-      <nav className="navbar">
-        <button className="back-btn" onClick={() => navigate('/')}>
-          <i className="fas fa-arrow-left"></i>
-        </button>
-        <h1 className="logo">恋爱小贴士</h1>
-        <button 
-          className={`fav-btn ${showFavorites ? 'active' : ''}`}
-          onClick={() => setShowFavorites(!showFavorites)}
-        >
-          <i className="far fa-heart"></i>
-          {favorites.length > 0 && (
-            <span className="badge">{favorites.length}</span>
-          )}
-        </button>
-      </nav>
-
-      {/* 主内容区域 */}
-      <main className="main-content">
-        {showFavorites ? (
-          // 收藏的小贴士
-          <>
-            <section className="tips-section">
-              <h2>我的收藏</h2>
-              {getFavoriteTips().length === 0 ? (
-                <div style={{ 
-                  textAlign: 'center', 
-                  padding: '2rem',
-                  color: '#666' 
-                }}>
-                  <i className="far fa-heart" style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem' }}></i>
-                  <p>还没有收藏任何小贴士哦</p>
-                  <p style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>
-                    浏览小贴士时点击心形图标进行收藏
-                  </p>
-                </div>
-              ) : (
-                getFavoriteTips().map(tip => (
-                  <div key={tip.id} className="tip-item">
-                    <div className="tip-header">
-                      <h3>{tip.title}</h3>
-                      <button 
-                        className="favorite-btn active"
-                        onClick={() => toggleFavorite(tip.id)}
-                        aria-label="取消收藏"
-                      >
-                        <i className="fas fa-heart"></i>
-                      </button>
-                    </div>
-                    <p className="tip-content">{tip.content}</p>
-                    <span className="tip-category">{tip.category}</span>
+      {showFavorites ? (
+        // 收藏的小贴士
+        <div className="module-container">
+          <section className="tips-section">
+            <h2>我的收藏</h2>
+            {getFavoriteTips().length === 0 ? (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '2rem',
+                color: '#666' 
+              }}>
+                <i className="far fa-heart" style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem' }}></i>
+                <p>还没有收藏任何小贴士哦</p>
+                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>
+                  浏览小贴士时点击心形图标进行收藏
+                </p>
+              </div>
+            ) : (
+              getFavoriteTips().map(tip => (
+                <div key={tip.id} className="tip-item">
+                  <div className="tip-header">
+                    <h3>{tip.title}</h3>
+                    <button 
+                      className="favorite-btn active"
+                      onClick={() => toggleFavorite(tip.id)}
+                      aria-label="取消收藏"
+                    >
+                      <i className="fas fa-heart"></i>
+                    </button>
                   </div>
-                ))
-              )}
-            </section>
-          </>
-        ) : (
-          // 所有小贴士
-          <>
-            {/* 今日小贴士 */}
-            {tipOfTheDay && (
+                  <p className="tip-content">{tip.content}</p>
+                  <span className="tip-category">{tip.category}</span>
+                </div>
+              ))
+            )}
+          </section>
+        </div>
+      ) : (
+        // 所有小贴士
+        <>
+          {/* 今日小贴士 */}
+          {tipOfTheDay && (
+            <div className="module-container">
               <section className="daily-reminder">
                 <div className="reminder-content">
                   <h3>💡 今日小贴士</h3>
@@ -194,11 +176,13 @@ function Tips() {
                   <p className="tip-text">{tipOfTheDay.content}</p>
                 </div>
               </section>
-            )}
-
-            {/* 分类展示所有小贴士 */}
-            {Object.keys(categorizedTips).map(category => (
-              <section key={category} className="tips-section">
+            </div>
+          )}
+          
+          {/* 分类展示所有小贴士 */}
+          {Object.keys(categorizedTips).map(category => (
+            <div key={category} className="module-container">
+              <section className="tips-section">
                 <h2>{category}</h2>
                 {categorizedTips[category].map(tip => (
                   <div key={tip.id} className="tip-item">
@@ -220,10 +204,10 @@ function Tips() {
                   </div>
                 ))}
               </section>
-            ))}
-          </>
-        )}
-      </main>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   )
 }

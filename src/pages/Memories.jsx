@@ -53,23 +53,11 @@ function Memories({ memories, onAddMemory }) {
 
   return (
     <div className="memories-page">
-      {/* 顶部导航 */}
-      <nav className="navbar">
-        <button className="back-btn" onClick={() => navigate('/')}>
-          <i className="fas fa-arrow-left"></i>
-        </button>
-        <h1 className="logo">共同回忆</h1>
-        <button 
-          className="add-btn" 
-          onClick={() => setShowAddForm(!showAddForm)}
-        >
-          <i className="fas fa-plus"></i>
-        </button>
-      </nav>
 
       {/* 添加回忆表单 */}
       {showAddForm && (
-        <div className="form-section">
+        <div className="module-container">
+          <div className="form-section">
           <button 
             className="close-btn" 
             onClick={() => setShowAddForm(false)}
@@ -113,16 +101,17 @@ function Memories({ memories, onAddMemory }) {
             </div>
             
             <div className="form-actions">
-              <button type="submit" disabled={loading}>
+              <button type="submit" className="primary" disabled={loading}>
                 {loading ? '添加中...' : '保存回忆'}
               </button>
             </div>
           </form>
         </div>
+      </div>
       )}
 
       {/* 主内容区域 - 回忆列表 */}
-      <main className="main-content">
+      <div className="module-container">
         {sortedMemories.length === 0 ? (
           <div style={{ 
             textAlign: 'center', 
@@ -137,6 +126,7 @@ function Memories({ memories, onAddMemory }) {
               点击右上角的加号，添加你们的第一个美好回忆吧！
             </p>
             <button 
+              className="primary"
               onClick={() => setShowAddForm(true)}
               style={{ width: '100%', padding: '0.8rem' }}
             >
@@ -165,7 +155,7 @@ function Memories({ memories, onAddMemory }) {
             ))}
           </section>
         )}
-      </main>
+      </div>
 
       {/* 提示消息 */}
       {message && (

@@ -12,14 +12,8 @@ function Home({ treeStatus, fruits, todayTip }) {
 
   return (
     <div className="home-page">
-      {/* 顶部导航 */}
-      <nav className="navbar">
-        <h1 className="logo"><i className="fas fa-heart"></i> Love APP</h1>
-      </nav>
-
-      {/* 主内容区域 */}
-      <main className="main-content">
-        {/* 情感树展示区域 */}
+      {/* 情感树展示区域 */}
+      <div className="module-container">
         <section className="tree-section">
           <div className="tree-container">
             <h2>我们的恋爱小树</h2>
@@ -40,8 +34,10 @@ function Home({ treeStatus, fruits, todayTip }) {
             </div>
           </div>
         </section>
+      </div>
 
-        {/* 功能导航 */}
+      {/* 功能导航 */}
+      <div className="module-container">
         <section className="feature-nav">
           <div className="feature-items">
             <Link to="/record" className="feature-item">
@@ -66,8 +62,10 @@ function Home({ treeStatus, fruits, todayTip }) {
             </Link>
           </div>
         </section>
+      </div>
 
-        {/* 今日提醒 */}
+      {/* 今日提醒 */}
+      <div className="module-container">
         <section className="daily-reminder">
           <div className="reminder-content">
             <h3>💌 今日小贴士</h3>
@@ -76,12 +74,7 @@ function Home({ treeStatus, fruits, todayTip }) {
             </p>
           </div>
         </section>
-      </main>
-
-      {/* 页脚 */}
-      <footer className="footer">
-        <p>Love APP - 让爱更纯粹 ❤️</p>
-      </footer>
+      </div>
     </div>
   )
 }

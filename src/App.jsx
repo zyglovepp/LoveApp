@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import Record from './pages/Record'
 import Tree from './pages/Tree'
@@ -7,6 +7,64 @@ import Rewards from './pages/Rewards'
 import Memories from './pages/Memories'
 import Tips from './pages/Tips'
 import './App.css'
+
+// 自定义导航栏组件
+const TopNavbar = () => {
+  const location = useLocation();
+  
+  return (
+    <nav className="top-navbar">
+      <div className="app-title">
+        <i className="fas fa-heart"></i>
+        <span>恋爱小助手</span>
+      </div>
+      <div className="nav-actions">
+        <Link to="/memories" className={`nav-icon ${location.pathname === '/memories' ? 'active' : ''}`}>
+          <i className="fas fa-bookmark"></i>
+        </Link>
+        <Link to="/tips" className={`nav-icon ${location.pathname === '/tips' ? 'active' : ''}`}>
+          <i className="fas fa-lightbulb"></i>
+        </Link>
+      </div>
+    </nav>
+  );
+};
+
+// 自定义底部标签导航组件
+const BottomNav = () => {
+  const location = useLocation();
+  
+  return (
+    <nav className="bottom-nav">
+      <div className="bottom-nav-items">
+        <Link to="/" className={`bottom-nav-item ${location.pathname === '/' ? 'active' : ''}`}>
+          <div className="bottom-nav-icon">
+            <i className="fas fa-home"></i>
+          </div>
+          <span className="bottom-nav-label">主页</span>
+        </Link>
+        <Link to="/record" className={`bottom-nav-item ${location.pathname === '/record' ? 'active' : ''}`}>
+          <div className="bottom-nav-icon">
+            <i className="fas fa-edit"></i>
+          </div>
+          <span className="bottom-nav-label">记录</span>
+        </Link>
+        <Link to="/tree" className={`bottom-nav-item ${location.pathname === '/tree' ? 'active' : ''}`}>
+          <div className="bottom-nav-icon">
+            <i className="fas fa-tree"></i>
+          </div>
+          <span className="bottom-nav-label">情感树</span>
+        </Link>
+        <Link to="/rewards" className={`bottom-nav-item ${location.pathname === '/rewards' ? 'active' : ''}`}>
+          <div className="bottom-nav-icon">
+            <i className="fas fa-gift"></i>
+          </div>
+          <span className="bottom-nav-label">我的</span>
+        </Link>
+      </div>
+    </nav>
+  );
+};
 
 function App() {
   // 模拟数据存储
@@ -163,45 +221,56 @@ function App() {
   return (
     <Router>
       <div className="app-container">
-        <Routes>
-          <Route 
-            path="/" 
-            element={<Home 
-              treeStatus={data.tree_status} 
-              fruits={data.fruits} 
-              todayTip={getTodayTip()} 
-            />} 
-          />
-          <Route 
-            path="/record" 
-            element={<Record onSubmitRecord={submitRecord} />} 
-          />
-          <Route 
-            path="/tree" 
-            element={<Tree treeStatus={data.tree_status} />} 
-          />
-          <Route 
-            path="/rewards" 
-            element={<Rewards 
-              fruits={data.fruits} 
-              rewards={data.rewards} 
-              onExchangeReward={exchangeReward} 
-            />} 
-          />
-          <Route 
-            path="/memories" 
-            element={<Memories 
-              memories={data.memories} 
-              anniversaries={data.anniversaries} 
-              onAddMemory={addMemory} 
-              onAddAnniversary={addAnniversary} 
-            />} 
-          />
-          <Route 
-            path="/tips" 
-            element={<Tips tips={data.tips} />} 
-          />
-        </Routes>
+        <div className="main-layout">
+          {/* 顶部固定导航栏 */}
+          <TopNavbar />
+          
+          {/* 主内容区域 */}
+          <div className="main-content">
+            <Routes>
+              <Route 
+                path="/" 
+                element={<Home 
+                  treeStatus={data.tree_status} 
+                  fruits={data.fruits} 
+                  todayTip={getTodayTip()} 
+                />} 
+              />
+              <Route 
+                path="/record" 
+                element={<Record onSubmitRecord={submitRecord} />} 
+              />
+              <Route 
+                path="/tree" 
+                element={<Tree treeStatus={data.tree_status} />} 
+              />
+              <Route 
+                path="/rewards" 
+                element={<Rewards 
+                  fruits={data.fruits} 
+                  rewards={data.rewards} 
+                  onExchangeReward={exchangeReward} 
+                />} 
+              />
+              <Route 
+                path="/memories" 
+                element={<Memories 
+                  memories={data.memories} 
+                  anniversaries={data.anniversaries} 
+                  onAddMemory={addMemory} 
+                  onAddAnniversary={addAnniversary} 
+                />} 
+              />
+              <Route 
+                path="/tips" 
+                element={<Tips tips={data.tips} />} 
+              />
+            </Routes>
+          </div>
+          
+          {/* 底部标签式导航栏 */}
+          <BottomNav />
+        </div>
       </div>
     </Router>
   )

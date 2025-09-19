@@ -42,17 +42,7 @@ function Record({ onSubmitRecord }) {
 
   return (
     <div className="record-page">
-      {/* 顶部导航 */}
-      <nav className="navbar">
-        <button className="back-btn" onClick={() => navigate('/')}>
-          <i className="fas fa-arrow-left"></i>
-        </button>
-        <h1 className="logo">记录付出</h1>
-        <div style={{ width: '1.5rem' }}></div> {/* 占位，保持标题居中 */}
-      </nav>
-
-      {/* 主内容区域 */}
-      <main className="main-content">
+      <div className="module-container">
         <section className="form-section">
           <h2>记录今天的付出</h2>
           <form onSubmit={handleSubmit}>
@@ -95,13 +85,13 @@ function Record({ onSubmitRecord }) {
             </div>
             
             <div className="form-actions">
-              <button type="submit" disabled={loading}>
+              <button type="submit" disabled={loading} className="primary">
                 {loading ? '提交中...' : '记录付出'}
               </button>
             </div>
           </form>
         </section>
-      </main>
+      </div>
 
       {/* 提示消息 */}
       {message && (

@@ -34,21 +34,110 @@ body {
   min-height: 100vh;
 }
 
+/* 基础按钮样式 */
 button {
-  border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #ff6b6b;
   color: white;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.3s ease;
+  outline: none;
 }
 
-button:hover {
-  opacity: 0.9;
+/* 主要按钮 - 红色圆角矩形 */
+button.primary {
+  background-color: #ff6b6b;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+}
+
+button.primary:hover {
+  background-color: #ff5252;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+}
+
+/* 次要按钮 - 蓝色圆角矩形 */
+button.secondary {
+  background-color: #4ecdc4;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.2);
+}
+
+button.secondary:hover {
+  background-color: #3dbdb6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.3);
+}
+
+/* 成功按钮 - 绿色圆角矩形 */
+button.success {
+  background-color: #4caf50;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+}
+
+button.success:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+}
+
+/* 警告按钮 - 黄色圆角矩形 */
+button.warning {
+  background-color: #ffd93d;
+  color: #333;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(255, 217, 61, 0.2);
+}
+
+button.warning:hover {
+  background-color: #ffcc00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 217, 61, 0.3);
+}
+
+/* 圆形按钮 */
+button.round {
+  background-color: #ff6b6b;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+}
+
+button.round:hover {
+  background-color: #ff5252;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+}
+
+/* 方形按钮 */
+button.square {
+  background-color: #ff6b6b;
+  border-radius: 8px;
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+}
+
+button.square:hover {
+  background-color: #ff5252;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
 }
 
 button:focus,

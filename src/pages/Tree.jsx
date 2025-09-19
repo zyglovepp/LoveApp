@@ -46,17 +46,7 @@ function Tree({ treeStatus }) {
   
   return (
     <div className="tree-page">
-      {/* 顶部导航 */}
-      <nav className="navbar">
-        <button className="back-btn" onClick={() => navigate('/')}>
-          <i className="fas fa-arrow-left"></i>
-        </button>
-        <h1 className="logo">情感树</h1>
-        <div style={{ width: '1.5rem' }}></div> {/* 占位，保持标题居中 */}
-      </nav>
-
-      {/* 主内容区域 */}
-      <main className="main-content">
+      <div className="module-container">
         <section className="tree-section">
           <div className="tree-container">
             <h2>我们的恋爱小树</h2>
@@ -81,7 +71,9 @@ function Tree({ treeStatus }) {
             </div>
           </div>
         </section>
-        
+      </div>
+
+      <div className="module-container">
         <section className="daily-reminder">
           <div className="reminder-content">
             <h3>💡 成长小贴士</h3>
@@ -90,14 +82,15 @@ function Tree({ treeStatus }) {
               点击下方按钮去记录今天的付出吧！
             </p>
             <button 
-              style={{ marginTop: '1rem', width: '100%', padding: '0.8rem' }} 
+              className="primary" 
+              style={{ marginTop: '1rem', width: '100%', padding: '0.8rem' }}
               onClick={() => navigate('/record')}
             >
               <i className="fas fa-pen-fancy"></i> 去记录付出
             </button>
           </div>
         </section>
-      </main>
+      </div>
     </div>
   )
 }
