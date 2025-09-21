@@ -6,6 +6,7 @@ import Tree from './pages/Tree'
 import Rewards from './pages/Rewards'
 import Memories from './pages/Memories'
 import Tips from './pages/Tips'
+import Profile from './pages/Profile'
 import './App.css'
 
 // 自定义导航栏组件
@@ -51,13 +52,19 @@ const BottomNav = () => {
         </Link>
         <Link to="/tree" className={`bottom-nav-item ${location.pathname === '/tree' ? 'active' : ''}`}>
           <div className="bottom-nav-icon">
-            <i className="fas fa-tree"></i>
+            <i className="fas fa-star"></i>
           </div>
-          <span className="bottom-nav-label">情感树</span>
+          <span className="bottom-nav-label">星空</span>
         </Link>
         <Link to="/rewards" className={`bottom-nav-item ${location.pathname === '/rewards' ? 'active' : ''}`}>
           <div className="bottom-nav-icon">
             <i className="fas fa-gift"></i>
+          </div>
+          <span className="bottom-nav-label">奖励</span>
+        </Link>
+        <Link to="/profile" className={`bottom-nav-item ${location.pathname === '/profile' ? 'active' : ''}`}>
+          <div className="bottom-nav-icon">
+            <i className="fas fa-user"></i>
           </div>
           <span className="bottom-nav-label">我的</span>
         </Link>
@@ -72,18 +79,42 @@ function App() {
     // 尝试从localStorage加载数据
     const savedData = localStorage.getItem('loveAppData')
     if (savedData) {
-      return JSON.parse(savedData)
+      const parsedData = JSON.parse(savedData);
+      // 迁移旧数据到新的星空系统
+      if (parsedData.tree_status) {
+        const starsEarned = parsedData.tree_status.water_count || 0;
+        return {
+          starry_sky: {
+            stars: starsEarned,
+            morning_stars: Math.floor(starsEarned / 5), // 简单迁移逻辑
+            today_records: 0,
+            last_record_date: parsedData.tree_status.last_water_date || null,
+            achievements: []
+          },
+          records: parsedData.records || [],
+          rewards: parsedData.rewards || [],
+          memories: parsedData.memories || [],
+          anniversaries: parsedData.anniversaries || [],
+          tips: parsedData.tips || [],
+          background: {
+            type: 'default',
+            value: null
+          }
+        };
+      }
+      return parsedData;
     }
     
     // 初始数据
     return {
       records: [],
-      tree_status: {
-        stage: 'seed',  // seed, sprout, leaf, flower, fruit
-        water_count: 0,
-        last_water_date: null
+      starry_sky: {
+        stars: 0,        // 付出星数量
+        morning_stars: 0, // 晨辉星数量
+        today_records: 0, // 今日记录数量
+        last_record_date: null, // 上次记录日期
+        achievements: [] // 成就列表
       },
-      fruits: 0,
       rewards: [],
       memories: [],
       anniversaries: [],
@@ -93,7 +124,11 @@ function App() {
         "定期表达感谢和爱意，不要把对方的好视为理所当然。",
         "给彼此一些个人空间，保持独立的自我。",
         "共同创造新的回忆，保持关系的新鲜感。"
-      ]
+      ],
+      background: {
+        type: 'default', // default, bg1, bg2, custom
+        value: null
+      }
     }
   })
 
@@ -102,59 +137,128 @@ function App() {
     localStorage.setItem('loveAppData', JSON.stringify(data))
   }, [data])
 
+  // 设置背景图
+  const setBackground = (type, value = null) => {
+    setData(prev => ({
+      ...prev,
+      background: {
+        type,
+        value
+      }
+    }))
+  }
+
   // API函数
-  const submitRecord = (content, mood, image = null) => {
+  const submitRecord = (content, mood, image = null, recordType = 'quick', voice = null, moodDescription = '') => {
     if (!content || content.trim().length < 5) {
       throw new Error('记录内容不能为空且至少5个字符')
     }
 
+    const today = new Date().toISOString().split('T')[0];
+    const isNewDay = today !== data.starry_sky.last_record_date;
+    
+    // 检查每日记录限制
+    if (!isNewDay && data.starry_sky.today_records >= 5) {
+      throw new Error('今日记录已达上限（5条），请明天再来记录吧！')
+    }
+
+    // 准备记录数据
     const newRecord = {
       id: data.records.length + 1,
       content,
       mood,
+      recordType, // quick: 快速记录, deep: 深度记录
+      voice: voice ? 'voice recording' : null, // 简化处理，实际项目可能需要更复杂的音频处理
+      moodDescription,
       date: new Date().toLocaleString('zh-CN'),
-      image: image ? image.name : null
+      image: image ? image.name : null,
+      starType: isNewDay ? 'morning_star' : 'normal_star' // 首次记录获得晨辉星
     }
 
-    const updatedTreeStatus = {
-      ...data.tree_status,
-      water_count: data.tree_status.water_count + 1,
-      last_water_date: new Date().toISOString().split('T')[0]
-    }
-
-    // 检查是否升级
-    let updatedStage = updatedTreeStatus.stage
-    let updatedFruits = data.fruits
+    // 更新星空状态
+    let updatedStars = data.starry_sky.stars + 1;
+    let updatedMorningStars = data.starry_sky.morning_stars;
+    let updatedTodayRecords = isNewDay ? 1 : data.starry_sky.today_records + 1;
     
-    if (updatedTreeStatus.water_count >= 50) {
-      updatedStage = 'fruit'
-      // 每结果一次获得一个果实
-      if (updatedTreeStatus.water_count % 50 === 0) {
-        updatedFruits += 1
-      }
-    } else if (updatedTreeStatus.water_count >= 30) {
-      updatedStage = 'flower'
-    } else if (updatedTreeStatus.water_count >= 15) {
-      updatedStage = 'leaf'
-    } else if (updatedTreeStatus.water_count >= 5) {
-      updatedStage = 'sprout'
+    // 首次记录奖励晨辉星
+    if (isNewDay) {
+      updatedMorningStars += 1;
     }
 
-    updatedTreeStatus.stage = updatedStage
+    // 检查成就解锁
+    const updatedAchievements = [...data.starry_sky.achievements];
+    const totalStars = updatedStars + updatedMorningStars;
+    
+    // 成就逻辑示例
+    if (totalStars >= 10 && !updatedAchievements.includes('first_star_light')) {
+      updatedAchievements.push('first_star_light');
+    }
+    if (totalStars >= 50 && !updatedAchievements.includes('star_forest')) {
+      updatedAchievements.push('star_forest');
+    }
+    if (data.records.length + 1 >= 30 && !updatedAchievements.includes('persistent_love')) {
+      updatedAchievements.push('persistent_love');
+    }
+
+    const updatedStarrySky = {
+      stars: updatedStars,
+      morning_stars: updatedMorningStars,
+      today_records: updatedTodayRecords,
+      last_record_date: today,
+      achievements: updatedAchievements
+    }
 
     setData(prev => ({
       ...prev,
       records: [...prev.records, newRecord],
-      tree_status: updatedTreeStatus,
-      fruits: updatedFruits
+      starry_sky: updatedStarrySky
     }))
 
-    return { success: true, message: '记录成功！情感树获得了养分～' }
+    const message = isNewDay 
+      ? '记录成功！获得了1颗晨辉星和1颗付出星～' 
+      : '记录成功！获得了1颗付出星～';
+    
+    return { success: true, message }
   }
 
+  // 检查并应用背景图
+  useEffect(() => {
+    const body = document.querySelector('body');
+    if (!body) return;
+
+    // 清除所有背景相关样式
+    body.style.backgroundImage = '';
+    body.style.backgroundSize = '';
+    body.style.backgroundPosition = '';
+    body.style.backgroundRepeat = '';
+
+    // 应用新背景 - 添加空值检查
+    if (data.background && data.background.type === 'default') {
+      body.style.background = 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)';
+    } else if (data.background && data.background.type === 'bg1') {
+      body.style.backgroundImage = 'url(/images/bg1.png)';
+      body.style.backgroundSize = 'cover';
+      body.style.backgroundPosition = 'center';
+      body.style.backgroundRepeat = 'no-repeat';
+    } else if (data.background && data.background.type === 'bg2') {
+      body.style.backgroundImage = 'url(/images/bg2.png)';
+      body.style.backgroundSize = 'cover';
+      body.style.backgroundPosition = 'center';
+      body.style.backgroundRepeat = 'no-repeat';
+    } else if (data.background && data.background.type === 'custom' && data.background.value) {
+      body.style.backgroundImage = `url(${data.background.value})`;
+      body.style.backgroundSize = 'cover';
+      body.style.backgroundPosition = 'center';
+      body.style.backgroundRepeat = 'no-repeat';
+    } else {
+      // 默认背景
+      body.style.background = 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)';
+    }
+  }, [data.background])
+
   const exchangeReward = (reward_type) => {
-    if (data.fruits < 1) {
-      throw new Error('果实数量不足')
+    if (data.starry_sky.morning_stars < 1) {
+      throw new Error('晨辉星数量不足')
     }
 
     const reward_names = {
@@ -174,10 +278,13 @@ function App() {
     setData(prev => ({
       ...prev,
       rewards: [...prev.rewards, new_reward],
-      fruits: prev.fruits - 1
+      starry_sky: {
+        ...prev.starry_sky,
+        morning_stars: prev.starry_sky.morning_stars - 1
+      }
     }))
 
-    return { success: true, message: '兑换成功！获得了' + new_reward.name }
+    return { success: true, message: '兑换成功！消耗1颗晨辉星，获得了' + new_reward.name }
   }
 
   const addMemory = (title, description, tags, image = null) => {
@@ -231,8 +338,7 @@ function App() {
               <Route 
                 path="/" 
                 element={<Home 
-                  treeStatus={data.tree_status} 
-                  fruits={data.fruits} 
+                  starrySky={data.starry_sky} 
                   todayTip={getTodayTip()} 
                 />} 
               />
@@ -242,12 +348,12 @@ function App() {
               />
               <Route 
                 path="/tree" 
-                element={<Tree treeStatus={data.tree_status} />} 
+                element={<Tree starrySky={data.starry_sky} />} 
               />
               <Route 
                 path="/rewards" 
                 element={<Rewards 
-                  fruits={data.fruits} 
+                  starrySky={data.starry_sky} 
                   rewards={data.rewards} 
                   onExchangeReward={exchangeReward} 
                 />} 
@@ -265,6 +371,7 @@ function App() {
                 path="/tips" 
                 element={<Tips tips={data.tips} />} 
               />
+              <Route path="/profile" element={<Profile data={data} setBackground={setBackground} />} />
             </Routes>
           </div>
           

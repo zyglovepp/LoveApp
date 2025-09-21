@@ -1,40 +1,80 @@
 import { Link } from 'react-router-dom'
 
-function Home({ treeStatus, fruits, todayTip }) {
-  // 阶段对应的中文名称
-  const stageNames = {
-    'seed': '种子',
-    'sprout': '发芽',
-    'leaf': '长叶',
-    'flower': '开花',
-    'fruit': '结果'
+function Home({ starrySky, todayTip }) {
+  // 生成简单的星空背景（用于首页展示）
+  const generateMiniStarrySky = () => {
+    const stars = [];
+    const totalStars = Math.min(20, starrySky.stars + starrySky.morning_stars);
+    
+    for (let i = 0; i < totalStars; i++) {
+      const left = Math.random() * 90 + 5;
+      const top = Math.random() * 90 + 5;
+      const size = Math.random() * 4 + 2;
+      const isMorningStar = i < Math.min(5, starrySky.morning_stars);
+      
+      stars.push({
+        id: i,
+        left: `${left}%`,
+        top: `${top}%`,
+        size: `${size}px`,
+        type: isMorningStar ? 'morning' : 'normal'
+      });
+    }
+    
+    return stars;
   }
 
+  const miniStars = generateMiniStarrySky()
+
   return (
-    <div className="home-page">
-      {/* 情感树展示区域 */}
-      <div className="module-container">
-        <section className="tree-section">
-          <div className="tree-container">
-            <h2>我们的恋爱小树</h2>
-            <div className="tree-image">
-              <img 
-                src={`/images/tree_${treeStatus.stage}.svg`} 
-                alt={stageNames[treeStatus.stage]} 
-                onError={(e) => {
-                  // 降级处理：如果找不到svg，使用简单的图标代替
-                  e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%234CAF50' d='M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z'/%3E%3C/svg%3E`;
-                }}
-              />
+      <div className="home-page">
+        {/* 星空展示区域 */}
+        <div className="module-container">
+          <section className="starry-sky-section">
+            <div className="starry-sky-container">
+              <h2>我们的爱情星空</h2>
+              
+              {/* 小型星空背景 */}
+              <div className="mini-sky-background">
+                {miniStars.map((star) => (
+                  <div
+                    key={star.id}
+                    className={`star ${star.type}`}
+                    style={{
+                      left: star.left,
+                      top: star.top,
+                      width: star.size,
+                      height: star.size,
+                      animationDelay: `${star.id * 0.1}s`
+                    }}
+                  />
+                ))}
+              </div>
+              
+              {/* 星空信息摘要 */}
+              <div className="star-summary">
+                <div className="star-counts">
+                  <div className="count-item">
+                    <span className="count-icon">⭐</span>
+                    <span className="count-text">{starrySky.stars} 付出星</span>
+                  </div>
+                  <div className="count-item">
+                    <span className="count-icon">☀️</span>
+                    <span className="count-text">{starrySky.morning_stars} 晨辉星</span>
+                  </div>
+                </div>
+                
+                <div className="today-status">
+                  <p>今日已记录: {starrySky.today_records}/5</p>
+                </div>
+                
+                <Link to="/tree" className="view-detail-link">
+                  查看星空详情 →
+                </Link>
+              </div>
             </div>
-            <div className="tree-info">
-              <p>当前状态：{stageNames[treeStatus.stage] || '种子'}</p>
-              <p>浇水次数：{treeStatus.water_count}</p>
-              <p>果实数量：{fruits} <i className="fas fa-apple-alt"></i></p>
-            </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
 
       {/* 功能导航 */}
       <div className="module-container">
@@ -45,12 +85,12 @@ function Home({ treeStatus, fruits, todayTip }) {
               <div className="feature-name">记录付出</div>
             </Link>
             <Link to="/tree" className="feature-item">
-              <div className="feature-icon"><i className="fas fa-tree"></i></div>
-              <div className="feature-name">情感树</div>
+              <div className="feature-icon"><i className="fas fa-star"></i></div>
+              <div className="feature-name">爱情星空</div>
             </Link>
             <Link to="/rewards" className="feature-item">
               <div className="feature-icon"><i className="fas fa-gift"></i></div>
-              <div className="feature-name">果实兑换</div>
+              <div className="feature-name">星愿兑换</div>
             </Link>
             <Link to="/memories" className="feature-item">
               <div className="feature-icon"><i className="fas fa-images"></i></div>

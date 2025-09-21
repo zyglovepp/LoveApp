@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-function Rewards({ fruits, rewards, onExchangeReward }) {
+function Rewards({ starrySky, rewards, onExchangeReward }) {
   const [selectedReward, setSelectedReward] = useState('make_up')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -40,12 +40,12 @@ function Rewards({ fruits, rewards, onExchangeReward }) {
         {/* 果实数量显示 */}
         <section className="tree-section">
           <div className="tree-container">
-            <h2>你的果实</h2>
+            <h2>你的晨辉星</h2>
             <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#ff6b6b' }}>
-              {fruits} <i className="fas fa-apple-alt"></i>
+              {starrySky.morning_stars} <i className="fas fa-sun"></i>
             </div>
             <p style={{ marginTop: '1rem', color: '#555' }}>
-              每记录50次付出，情感树就会结出一个果实
+              每完成一次深度记录，你将获得一颗珍贵的晨辉星
             </p>
           </div>
         </section>
@@ -78,13 +78,13 @@ function Rewards({ fruits, rewards, onExchangeReward }) {
                 type="button" 
                 className="primary"
                 onClick={handleExchange} 
-                disabled={loading || fruits < 1}
+                disabled={loading || starrySky.morning_stars < 1}
               >
-                {loading ? '兑换中...' : `兑换奖励 (消耗1个果实)`}
+                {loading ? '兑换中...' : `兑换奖励 (消耗1颗晨辉星)`}
               </button>
-            {fruits < 1 && (
+            {starrySky.morning_stars < 1 && (
               <p style={{ marginTop: '0.5rem', color: '#ff6b6b', fontSize: '0.9rem' }}>
-                果实数量不足，需要先记录更多的付出哦！
+                晨辉星数量不足，需要先进行深度记录哦！
               </p>
             )}
           </div>

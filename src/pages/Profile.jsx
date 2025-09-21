@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-function Profile() {
+function Profile({ data, setBackground }) {
   const [showSettings, setShowSettings] = useState(false)
   const [userInfo] = useState({
     name: '恋爱中的你',
     partnerName: '你的伴侣',
     togetherDays: 128,
-    treeLevel: 3,
+    starCount: 45,
+    morningStarCount: 9,
     totalRecords: 45
   })
 
@@ -27,8 +28,9 @@ function Profile() {
             <button 
               className="settings-btn" 
               onClick={() => setShowSettings(!showSettings)}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
-              <i className="fas fa-cog"></i>
+              <i className="fas fa-gear" style={{ fontSize: '1.2rem', color: '#666' }}></i>
             </button>
           </div>
         </section>
@@ -40,8 +42,12 @@ function Profile() {
           <h3>恋爱数据</h3>
           <div className="stats-grid">
             <div className="stat-item">
-              <div className="stat-value">{userInfo.treeLevel}</div>
-              <div className="stat-label">情感树等级</div>
+              <div className="stat-value">{userInfo.starCount}</div>
+              <div className="stat-label">付出星</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-value">{userInfo.morningStarCount}</div>
+              <div className="stat-label">晨辉星</div>
             </div>
             <div className="stat-item">
               <div className="stat-value">{userInfo.totalRecords}</div>
@@ -66,13 +72,13 @@ function Profile() {
               <i className="fas fa-chevron-right"></i>
             </Link>
             <Link to="/tree" className="function-item">
-              <i className="fas fa-tree"></i>
-              <span>我的情感树</span>
+              <i className="fas fa-star"></i>
+              <span>我的爱情星空</span>
               <i className="fas fa-chevron-right"></i>
             </Link>
             <Link to="/rewards" className="function-item">
               <i className="fas fa-gift"></i>
-              <span>果实兑换</span>
+              <span>星愿兑换</span>
               <i className="fas fa-chevron-right"></i>
             </Link>
             <Link to="/memories" className="function-item">
@@ -123,6 +129,46 @@ function Profile() {
                   <button className="color-btn active" style={{ backgroundColor: '#ff6b6b' }}></button>
                   <button className="color-btn" style={{ backgroundColor: '#4ecdc4' }}></button>
                   <button className="color-btn" style={{ backgroundColor: '#ffe66d' }}></button>
+                </div>
+              </div>
+              
+              {/* 背景设置 */}
+              <div className="setting-item">
+                <span>背景设置</span>
+                <div className="background-options">
+                  <button 
+                    className={`background-btn ${data?.background?.type === 'default' ? 'active' : ''}`} 
+                    onClick={() => setBackground('default')}
+                  >
+                    默认渐变
+                  </button>
+                  <button 
+                    className={`background-btn ${data?.background?.type === 'bg1' ? 'active' : ''}`} 
+                    onClick={() => setBackground('bg1')}
+                  >
+                    背景图1
+                  </button>
+                  <button 
+                    className={`background-btn ${data?.background?.type === 'bg2' ? 'active' : ''}`} 
+                    onClick={() => setBackground('bg2')}
+                  >
+                    背景图2
+                  </button>
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        const file = e.target.files[0];
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          setBackground('custom', event.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    style={{ marginTop: '0.5rem' }}
+                  />
                 </div>
               </div>
             </div>
