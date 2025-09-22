@@ -14,20 +14,24 @@ const TopNavbar = () => {
   const location = useLocation();
   
   return (
-    <nav className="top-navbar">
-      <div className="app-title">
-        <i className="fas fa-heart"></i>
-        <span>恋爱小助手</span>
-      </div>
-      <div className="nav-actions">
-        <Link to="/memories" className={`nav-icon ${location.pathname === '/memories' ? 'active' : ''}`}>
-          <i className="fas fa-bookmark"></i>
-        </Link>
-        <Link to="/tips" className={`nav-icon ${location.pathname === '/tips' ? 'active' : ''}`}>
-          <i className="fas fa-lightbulb"></i>
-        </Link>
-      </div>
-    </nav>
+    <>
+      <nav className="top-navbar">
+        <div className="app-title">
+          <i className="fas fa-heart"></i>
+          <span>恋爱小助手</span>
+        </div>
+        <div className="nav-actions">
+          <Link to="/memories" className={`nav-icon ${location.pathname === '/memories' ? 'active' : ''}`}>
+            <i className="fas fa-bookmark"></i>
+          </Link>
+          <Link to="/tips" className={`nav-icon ${location.pathname === '/tips' ? 'active' : ''}`}>
+            <i className="fas fa-lightbulb"></i>
+          </Link>
+        </div>
+      </nav>
+      {/* 为固定导航栏添加占位元素，防止内容被遮挡 */}
+      <div className="navbar-placeholder"></div>
+    </>
   );
 };
 
@@ -333,51 +337,23 @@ function App() {
           <TopNavbar />
           
           {/* 主内容区域 */}
-          <div className="main-content">
-            <Routes>
-              <Route 
-                path="/" 
-                element={<Home 
-                  starrySky={data.starry_sky} 
-                  todayTip={getTodayTip()} 
-                />} 
-              />
-              <Route 
-                path="/record" 
-                element={<Record onSubmitRecord={submitRecord} />} 
-              />
-              <Route 
-                path="/tree" 
-                element={<Tree starrySky={data.starry_sky} />} 
-              />
-              <Route 
-                path="/rewards" 
-                element={<Rewards 
-                  starrySky={data.starry_sky} 
-                  rewards={data.rewards} 
-                  onExchangeReward={exchangeReward} 
-                />} 
-              />
-              <Route 
-                path="/memories" 
-                element={<Memories 
-                  memories={data.memories} 
-                  anniversaries={data.anniversaries} 
-                  onAddMemory={addMemory} 
-                  onAddAnniversary={addAnniversary} 
-                />} 
-              />
-              <Route 
-                path="/tips" 
-                element={<Tips tips={data.tips} />} 
-              />
-              <Route path="/profile" element={<Profile data={data} setBackground={setBackground} />} />
-            </Routes>
+          <div className="main-content-wrapper">
+            <div className="main-content">
+              <Routes>
+                <Route path="/" element={<Home starrySky={data.starry_sky} todayTip={getTodayTip()} />} />
+                <Route path="/record" element={<Record onSubmitRecord={submitRecord} />} />
+                <Route path="/tree" element={<Tree starrySky={data.starry_sky} />} />
+                <Route path="/rewards" element={<Rewards starrySky={data.starry_sky} rewards={data.rewards} onExchangeReward={exchangeReward} />} />
+                <Route path="/memories" element={<Memories memories={data.memories} anniversaries={data.anniversaries} onAddMemory={addMemory} onAddAnniversary={addAnniversary} />} />
+                <Route path="/tips" element={<Tips tips={data.tips} />} />
+                <Route path="/profile" element={<Profile data={data} setBackground={setBackground} />} />
+              </Routes>
+            </div>
           </div>
-          
-          {/* 底部标签式导航栏 */}
-          <BottomNav />
         </div>
+        
+        {/* 底部标签式导航栏 */}
+        <BottomNav />
       </div>
     </Router>
   )

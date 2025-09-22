@@ -15,6 +15,13 @@
   min-height: 100vh;
 }
 
+/* 主内容包装器 - 包含主要内容区域，让内容以下方导航栏为基准 */
+.main-content-wrapper {
+  flex: 1;
+  position: relative;
+  margin-bottom: 6rem; /* 为底部导航栏留出空间 */
+}
+
 /* 顶部导航栏样式 - 固定导航栏 */
 .top-navbar {
   display: flex;
@@ -67,7 +74,13 @@
 /* 主内容区域 - 为固定导航栏留出空间 */
 .main-content {
   flex: 1;
-  padding: 80px 1.5rem 2rem;
+  padding: 2rem 1.5rem 2rem; /* 底部padding调整为正常大小，底部空间由wrapper处理 */
+}
+
+/* 导航栏占位元素，防止内容被遮挡 */
+.navbar-placeholder {
+  height: 70px; /* 与top-navbar高度匹配 */
+  width: 100%;
 }
 
 /* 模块容器 - 优化各模块间的留白 */
