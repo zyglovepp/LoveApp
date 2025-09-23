@@ -9,6 +9,9 @@ import Tips from './pages/Tips'
 import Profile from './pages/Profile'
 import './App.css'
 
+// 导入数据库服务
+import { connectToDB, migrateLocalDataToDB, fetchUserDataFromDB, saveRecordToDB, saveStarrySkyToDB, saveRewardToDB, saveMemoryToDB, saveAnniversaryToDB, getUserId } from './services/dbService'
+
 // 自定义导航栏组件
 const TopNavbar = () => {
   const location = useLocation();
@@ -136,6 +139,83 @@ function App() {
     }
   })
 
+  // 用户ID
+  const [userId] = useState(getUserId);
+
+  // 数据库连接和数据同步
+  useEffect(() => {
+    // 临时：确保数据迁移能够触发
+    // 如果localStorage中没有dataSyncedWithDB标志，添加一些示例数据并触发迁移
+    const hasSynced = localStorage.getItem('dataSyncedWithDB');
+    if (!hasSynced) {
+      console.log('临时：未检测到同步标志，确保有测试数据');
+      const testData = {
+        records: [{ id: '1', content: '测试记录', recordType: 'normal', date: new Date().toISOString() }],
+        starry_sky: { stars: 0, morning_stars: 0, today_records: 0, last_record_date: null, achievements: [] },
+        rewards: [],
+        memories: [],
+        anniversaries: []
+      };
+      localStorage.setItem('loveAppData', JSON.stringify(testData));
+    }
+    
+    const initDatabase = async () => {
+      try {
+        console.log('初始化数据库连接...');
+        // 连接到后端服务
+        const connectResult = await connectToDB();
+        console.log('连接结果:', connectResult);
+        
+        // 检查是否需要从本地迁移数据
+        const savedData = localStorage.getItem('loveAppData');
+        const hasSynced = localStorage.getItem('dataSyncedWithDB');
+        console.log('本地数据状态 - 有数据:', !!savedData, '已同步:', !!hasSynced);
+        
+        if (savedData && !hasSynced) {
+          console.log('开始从本地迁移数据到服务器');
+          const parsedData = JSON.parse(savedData);
+          const migrateResult = await migrateLocalDataToDB(userId, parsedData);
+          
+          if (migrateResult.success) {
+            console.log('数据迁移成功');
+            localStorage.setItem('dataSyncedWithDB', 'true');
+          } else {
+            console.error('数据迁移失败:', migrateResult.message);
+          }
+        } else {
+          // 尝试从数据库加载数据
+          console.log('尝试从数据库加载数据');
+          const fetchResult = await fetchUserDataFromDB(userId);
+          
+          if (fetchResult.success && fetchResult.data) {
+            const dbData = fetchResult.data;
+            // 合并数据库数据和本地数据
+            setData(prevData => {
+              const mergedData = {
+                ...prevData,
+                ...dbData,
+                // 确保tips和background字段存在
+                tips: prevData.tips,
+                background: prevData.background
+              };
+              return mergedData;
+            });
+          }
+        }
+      } catch (error) {
+        console.error('数据库初始化失败:', error);
+        // 数据库连接失败不影响应用功能，继续使用本地存储
+      }
+    };
+
+    initDatabase();
+
+    // 组件卸载时断开数据库连接
+    return () => {
+      // 注意：在Web应用中，我们通常不主动断开连接，而是让连接保持活跃
+    };
+  }, [userId]);
+
   // 保存数据到localStorage
   useEffect(() => {
     localStorage.setItem('loveAppData', JSON.stringify(data))
@@ -153,7 +233,7 @@ function App() {
   }
 
   // API函数
-  const submitRecord = (content, mood, image = null, recordType = 'quick', voice = null, moodDescription = '') => {
+  const submitRecord = async (content, mood, image = null, recordType = 'quick', voice = null, moodDescription = '') => {
     if (!content || content.trim().length < 5) {
       throw new Error('记录内容不能为空且至少5个字符')
     }
@@ -218,6 +298,16 @@ function App() {
       starry_sky: updatedStarrySky
     }))
 
+    // 尝试保存到数据库
+    try {
+      await saveRecordToDB(userId, newRecord);
+      await saveStarrySkyToDB(userId, updatedStarrySky);
+      console.log('记录已保存到数据库');
+    } catch (error) {
+      console.error('保存记录到数据库失败:', error);
+      // 数据库保存失败不会影响应用功能，继续使用本地存储
+    }
+
     const message = isNewDay 
       ? '记录成功！获得了1颗晨辉星和1颗付出星～' 
       : '记录成功！获得了1颗付出星～';
@@ -260,7 +350,7 @@ function App() {
     }
   }, [data.background])
 
-  const exchangeReward = (reward_type) => {
+  const exchangeReward = async (reward_type) => {
     if (data.starry_sky.morning_stars < 1) {
       throw new Error('晨辉星数量不足')
     }
@@ -279,19 +369,31 @@ function App() {
       used: false
     }
 
+    const updatedStarrySky = {
+      ...data.starry_sky,
+      morning_stars: data.starry_sky.morning_stars - 1
+    }
+
     setData(prev => ({
       ...prev,
       rewards: [...prev.rewards, new_reward],
-      starry_sky: {
-        ...prev.starry_sky,
-        morning_stars: prev.starry_sky.morning_stars - 1
-      }
+      starry_sky: updatedStarrySky
     }))
+
+    // 尝试保存到数据库
+    try {
+      await saveRewardToDB(userId, new_reward);
+      await saveStarrySkyToDB(userId, updatedStarrySky);
+      console.log('奖励已保存到数据库');
+    } catch (error) {
+      console.error('保存奖励到数据库失败:', error);
+      // 数据库保存失败不会影响应用功能，继续使用本地存储
+    }
 
     return { success: true, message: '兑换成功！消耗1颗晨辉星，获得了' + new_reward.name }
   }
 
-  const addMemory = (title, description, tags, image = null) => {
+  const addMemory = async (title, description, tags, image = null) => {
     const newMemory = {
       id: data.memories.length + 1,
       title,
@@ -306,10 +408,19 @@ function App() {
       memories: [...prev.memories, newMemory]
     }))
 
+    // 尝试保存到数据库
+    try {
+      await saveMemoryToDB(userId, newMemory);
+      console.log('回忆已保存到数据库');
+    } catch (error) {
+      console.error('保存回忆到数据库失败:', error);
+      // 数据库保存失败不会影响应用功能，继续使用本地存储
+    }
+
     return { success: true, message: '回忆添加成功！' }
   }
 
-  const addAnniversary = (name, date) => {
+  const addAnniversary = async (name, date) => {
     const newAnniversary = {
       id: data.anniversaries.length + 1,
       name,
@@ -321,12 +432,45 @@ function App() {
       anniversaries: [...prev.anniversaries, newAnniversary]
     }))
 
+    // 尝试保存到数据库
+    try {
+      await saveAnniversaryToDB(userId, newAnniversary);
+      console.log('纪念日已保存到数据库');
+    } catch (error) {
+      console.error('保存纪念日到数据库失败:', error);
+      // 数据库保存失败不会影响应用功能，继续使用本地存储
+    }
+
     return { success: true, message: '纪念日添加成功！' }
   }
 
   // 获取今日小贴士
   const getTodayTip = () => {
     return data.tips[Math.floor(Math.random() * data.tips.length)]
+  }
+
+  // 手动触发数据迁移（临时用于调试）
+  const manuallyTriggerMigration = async () => {
+    console.log('手动触发数据迁移流程');
+    const savedData = localStorage.getItem('loveAppData');
+    if (savedData) {
+      try {
+        const parsedData = JSON.parse(savedData);
+        console.log('准备迁移的数据:', parsedData);
+        const migrateResult = await migrateLocalDataToDB(userId, parsedData);
+        if (migrateResult.success) {
+          console.log('数据迁移成功');
+          localStorage.setItem('dataSyncedWithDB', 'true');
+          alert('数据迁移成功！');
+        } else {
+          console.error('数据迁移失败:', migrateResult.message);
+          alert('数据迁移失败: ' + migrateResult.message);
+        }
+      } catch (error) {
+        console.error('数据迁移失败:', error);
+        alert('数据迁移失败: ' + error.message);
+      }
+    }
   }
 
   return (
@@ -338,6 +482,25 @@ function App() {
           
           {/* 主内容区域 */}
           <div className="main-content-wrapper">
+            {/* 临时：用于调试的数据迁移按钮 */}
+            <button 
+              onClick={manuallyTriggerMigration} 
+              style={{
+                position: 'fixed',
+                top: '20px',
+                right: '20px',
+                zIndex: 1000,
+                padding: '10px 20px',
+                backgroundColor: 'blue',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              手动触发数据迁移
+            </button>
+            
             <div className="main-content">
               <Routes>
                 <Route path="/" element={<Home starrySky={data.starry_sky} todayTip={getTodayTip()} />} />
