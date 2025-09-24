@@ -1,12 +1,27 @@
 // 重构后的数据库服务 - 使用后端API而非直接连接MongoDB
 
-// 后端API基础URL - 使用相对路径，由Vite代理处理
-const API_BASE_URL = '/api';
+// 后端API配置
+let API_BASE_URL = '/api';
+
+// 在Capacitor环境中，需要使用完整的API URL
+if (window.Capacitor) {
+  // 在实际部署时，应替换为实际的后端API服务器地址
+  // 这里使用localhost作为示例，但在实际手机上可能需要使用局域网IP或公网地址
+  API_BASE_URL = 'http://localhost:3001/api';
+}
 
 // 简单的HTTP请求包装函数
 const request = async (url, options = {}) => {
   try {
-    const response = await fetch(`${API_BASE_URL}${url}`, {
+    // 处理URL，确保不会有重复的/api前缀
+    let fullUrl = '';
+    if (url.startsWith('/')) {
+      fullUrl = API_BASE_URL + url;
+    } else {
+      fullUrl = API_BASE_URL + '/' + url;
+    }
+    
+    const response = await fetch(fullUrl, {
       ...options,
       headers: {
         'Content-Type': 'application/json',

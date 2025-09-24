@@ -5,8 +5,10 @@ import Record from './pages/Record'
 import Tree from './pages/Tree'
 import Rewards from './pages/Rewards'
 import Memories from './pages/Memories'
+import Anniversaries from './pages/Anniversaries'
 import Tips from './pages/Tips'
 import Profile from './pages/Profile'
+import Settings from './pages/Settings'
 import './App.css'
 
 // 导入数据库服务
@@ -24,8 +26,8 @@ const TopNavbar = () => {
           <span>恋爱小助手</span>
         </div>
         <div className="nav-actions">
-          <Link to="/memories" className={`nav-icon ${location.pathname === '/memories' ? 'active' : ''}`}>
-            <i className="fas fa-bookmark"></i>
+          <Link to="/anniversaries" className={`nav-icon ${location.pathname === '/anniversaries' ? 'active' : ''}`}>
+            <i className="fas fa-calendar-alt"></i>
           </Link>
           <Link to="/tips" className={`nav-icon ${location.pathname === '/tips' ? 'active' : ''}`}>
             <i className="fas fa-lightbulb"></i>
@@ -393,13 +395,15 @@ function App() {
     return { success: true, message: '兑换成功！消耗1颗晨辉星，获得了' + new_reward.name }
   }
 
-  const addMemory = async (title, description, tags, image = null) => {
+  const addMemory = async (description, date, image = null) => {
+    // 使用description的前几个字符作为title
+    const title = description.length > 15 ? description.substring(0, 15) + '...' : description
     const newMemory = {
       id: data.memories.length + 1,
       title,
       description,
-      tags: tags ? tags.split(',') : [],
-      date: new Date().toISOString().split('T')[0],
+      tags: [], // 暂时设为空数组，因为表单中没有标签输入
+      date: date || new Date().toISOString().split('T')[0],
       image: image ? image.name : null
     }
 
@@ -482,24 +486,7 @@ function App() {
           
           {/* 主内容区域 */}
           <div className="main-content-wrapper">
-            {/* 临时：用于调试的数据迁移按钮 */}
-            <button 
-              onClick={manuallyTriggerMigration} 
-              style={{
-                position: 'fixed',
-                top: '20px',
-                right: '20px',
-                zIndex: 1000,
-                padding: '10px 20px',
-                backgroundColor: 'blue',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
-              }}
-            >
-              手动触发数据迁移
-            </button>
+
             
             <div className="main-content">
               <Routes>
@@ -507,9 +494,11 @@ function App() {
                 <Route path="/record" element={<Record onSubmitRecord={submitRecord} />} />
                 <Route path="/tree" element={<Tree starrySky={data.starry_sky} />} />
                 <Route path="/rewards" element={<Rewards starrySky={data.starry_sky} rewards={data.rewards} onExchangeReward={exchangeReward} />} />
-                <Route path="/memories" element={<Memories memories={data.memories} anniversaries={data.anniversaries} onAddMemory={addMemory} onAddAnniversary={addAnniversary} />} />
+                <Route path="/memories" element={<Memories memories={data.memories} onAddMemory={addMemory} />} />
+                <Route path="/anniversaries" element={<Anniversaries anniversaries={data.anniversaries} onAddAnniversary={addAnniversary} />} />
                 <Route path="/tips" element={<Tips tips={data.tips} />} />
-                <Route path="/profile" element={<Profile data={data} setBackground={setBackground} />} />
+                <Route path="/profile" element={<Profile data={data} setBackground={setBackground} onTriggerMigration={manuallyTriggerMigration} />} />
+                <Route path="/settings" element={<Settings data={data} setBackground={setBackground} onTriggerMigration={manuallyTriggerMigration} />} />
               </Routes>
             </div>
           </div>

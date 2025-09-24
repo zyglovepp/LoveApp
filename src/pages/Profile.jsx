@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-function Profile({ data, setBackground }) {
-  const [showSettings, setShowSettings] = useState(false)
+function Profile({ data, setBackground, onTriggerMigration }) {
   const [userInfo] = useState({
     name: '恋爱中的你',
     partnerName: '你的伴侣',
@@ -25,13 +24,6 @@ function Profile({ data, setBackground }) {
               <h2>{userInfo.name}</h2>
               <p>与 {userInfo.partnerName} 相恋 {userInfo.togetherDays} 天</p>
             </div>
-            <button 
-              className="settings-btn" 
-              onClick={() => setShowSettings(!showSettings)}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <i className="fas fa-gear" style={{ fontSize: '1.2rem', color: '#666' }}></i>
-            </button>
           </div>
         </section>
       </div>
@@ -62,28 +54,13 @@ function Profile({ data, setBackground }) {
       </div>
 
       <div className="module-container">
-        {/* 功能列表 */}
+        {/* 功能列表 - 仅保留设置图标 */}
         <section className="profile-functions">
           <h3>功能导航</h3>
           <div className="function-list">
-            <Link to="/" className="function-item">
-              <i className="fas fa-home"></i>
-              <span>返回主页</span>
-              <i className="fas fa-chevron-right"></i>
-            </Link>
-            <Link to="/tree" className="function-item">
-              <i className="fas fa-star"></i>
-              <span>我的爱情星空</span>
-              <i className="fas fa-chevron-right"></i>
-            </Link>
-            <Link to="/rewards" className="function-item">
-              <i className="fas fa-gift"></i>
-              <span>星愿兑换</span>
-              <i className="fas fa-chevron-right"></i>
-            </Link>
-            <Link to="/memories" className="function-item">
-              <i className="fas fa-book"></i>
-              <span>共同回忆</span>
+            <Link to="/settings" className="function-item">
+              <i className="fas fa-cog"></i>
+              <span>设置</span>
               <i className="fas fa-chevron-right"></i>
             </Link>
           </div>
@@ -102,79 +79,7 @@ function Profile({ data, setBackground }) {
         </section>
       </div>
 
-      {/* 设置面板（默认隐藏） */}
-      {showSettings && (
-        <div className="module-container">
-          <section className="settings-section">
-            <div className="settings-header">
-              <h3>设置</h3>
-              <button 
-                className="close-btn" 
-                onClick={() => setShowSettings(false)}
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            <div className="settings-content">
-              <div className="setting-item">
-                <span>通知提醒</span>
-                <label className="switch">
-                  <input type="checkbox" defaultChecked />
-                  <span className="slider"></span>
-                </label>
-              </div>
-              <div className="setting-item">
-                <span>主题颜色</span>
-                <div className="color-options">
-                  <button className="color-btn active" style={{ backgroundColor: '#ff6b6b' }}></button>
-                  <button className="color-btn" style={{ backgroundColor: '#4ecdc4' }}></button>
-                  <button className="color-btn" style={{ backgroundColor: '#ffe66d' }}></button>
-                </div>
-              </div>
-              
-              {/* 背景设置 */}
-              <div className="setting-item">
-                <span>背景设置</span>
-                <div className="background-options">
-                  <button 
-                    className={`background-btn ${data?.background?.type === 'default' ? 'active' : ''}`} 
-                    onClick={() => setBackground('default')}
-                  >
-                    默认渐变
-                  </button>
-                  <button 
-                    className={`background-btn ${data?.background?.type === 'bg1' ? 'active' : ''}`} 
-                    onClick={() => setBackground('bg1')}
-                  >
-                    背景图1
-                  </button>
-                  <button 
-                    className={`background-btn ${data?.background?.type === 'bg2' ? 'active' : ''}`} 
-                    onClick={() => setBackground('bg2')}
-                  >
-                    背景图2
-                  </button>
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        const file = e.target.files[0];
-                        const reader = new FileReader();
-                        reader.onload = (event) => {
-                          setBackground('custom', event.target.result);
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                    style={{ marginTop: '0.5rem' }}
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      )}
+
 
       {/* 页脚版权信息 */}
       <div className="profile-footer">

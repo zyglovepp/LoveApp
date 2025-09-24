@@ -311,12 +311,12 @@ app.post('/api/user/:userId/save', async (req, res) => {
           if (existing.length) {
             await connection.execute(
               'UPDATE memories SET title = ?, content = ?, date = ?, imageUrl = ? WHERE id = ?',
-              [memory.title, memory.content, memory.date, memory.imageUrl, memory.id]
+              [memory.title || null, memory.content || null, memory.date || null, memory.imageUrl || null, memory.id]
             );
           } else {
             await connection.execute(
               'INSERT INTO memories (id, userId, title, content, date, imageUrl) VALUES (?, ?, ?, ?, ?, ?)',
-              [memory.id, userId, memory.title, memory.content, memory.date, memory.imageUrl]
+              [memory.id, userId, memory.title || null, memory.content || null, memory.date || null, memory.imageUrl || null]
             );
           }
         }
@@ -471,6 +471,81 @@ app.post('/api/records', async (req, res) => {
     res.status(500).json({
       success: false,
       message: '保存记录失败',
+      error: error.message
+    });
+  }
+});
+
+// 保存单条回忆
+app.post('/api/memories', async (req, res) => {
+  try {
+    await initializePool();
+    const { userId, title, content, date, imageUrl, id } = req.body;
+    
+    // 验证必要字段并设置默认值
+    if (!userId || !title) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId和title是必需的'
+      });
+    }
+    
+    // 确保content和imageUrl不是undefined
+    const safeContent = content || '';
+    const safeImageUrl = imageUrl || null;
+    
+    // 确保用户存在
+    const [existingUser] = await pool.execute('SELECT id FROM users WHERE id = ?', [userId]);
+    if (!existingUser.length) {
+      const defaultUsername = `User_${userId}`;
+      await pool.execute('INSERT INTO users (id, username) VALUES (?, ?)', [userId, defaultUsername]);
+      console.log(`用户 ${userId} 不存在，已创建，用户名: ${defaultUsername}`);
+    }
+    
+    // 生成记忆ID（如果没有提供）
+    const memoryId = id || Date.now().toString() + Math.random().toString(36).substr(2, 9);
+    
+    // 将ISO日期格式转换为MySQL兼容的日期时间格式
+    let mysqlDate = date;
+    if (date && typeof date === 'string') {
+      // 处理ISO格式如2025-09-22T15:13:21.000Z
+      if (date.includes('T') && date.includes('Z')) {
+        const dateObj = new Date(date);
+        mysqlDate = dateObj.toISOString().slice(0, 19).replace('T', ' ');
+      } else if (date.includes('/')) {
+        // 处理本地日期格式如"2023/9/22 15:13:21"
+        const dateObj = new Date(date.replace(/\//g, '-'));
+        mysqlDate = dateObj.toISOString().slice(0, 19).replace('T', ' ');
+      }
+    }
+    
+    // 检查记忆是否已存在
+    const [existingMemory] = await pool.execute('SELECT id FROM memories WHERE id = ?', [memoryId]);
+    
+    if (existingMemory.length) {
+      // 更新现有记忆
+      await pool.execute(
+        'UPDATE memories SET title = ?, content = ?, date = ?, imageUrl = ? WHERE id = ?',
+        [title, safeContent, mysqlDate, safeImageUrl, memoryId]
+      );
+    } else {
+      // 插入新记忆
+      await pool.execute(
+        'INSERT INTO memories (id, userId, title, content, date, imageUrl) VALUES (?, ?, ?, ?, ?, ?)',
+        [memoryId, userId, title, safeContent, mysqlDate, safeImageUrl]
+      );
+    }
+    
+    res.json({
+      success: true,
+      message: '回忆保存成功',
+      data: { id: memoryId }
+    });
+  } catch (error) {
+    console.error('保存回忆时出错:', error);
+    res.status(500).json({
+      success: false,
+      message: '保存回忆失败',
       error: error.message
     });
   }
